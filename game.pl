@@ -1,3 +1,5 @@
+:- module(game, [moves/2, terminal/2]).
+
 % Nim game predicates (move generators, terminal positions, ...)
 % A nim position is represented by the term nim(turn, [n_0, ..., n_k]) where n_i
 % represents the number of matches left in row i. turn is one of ["us", "them"].
