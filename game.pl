@@ -29,3 +29,7 @@ c0([H| L], N) :- H > 0, !, c0(L, N1), N is N1 + 1.
 
 nextturn(us, them).
 nextturn(them, us).
+
+% Check game termination
+% If a player leaves a completely empty set of matches, they win.
+terminal(nim(T, Pos), W) :- c0(Pos, 0), nextturn(T, W).
