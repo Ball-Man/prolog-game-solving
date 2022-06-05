@@ -1,3 +1,5 @@
 :- use_module(game).
+:- use_module(andor).
 
-?- moves(nim(T, [1, 2, 3]), P), write(P).
+%% :- trace.
+?- next(nim(us, [1, 2]), Pos), write(Pos).

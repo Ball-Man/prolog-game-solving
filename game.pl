@@ -1,10 +1,13 @@
-:- module(game, [moves/2, terminal/2]).
+:- module(game, [moves/2, terminal/2, tomove/2]).
 
 % Nim game predicates (move generators, terminal positions, ...)
 % A nim position is represented by the term nim(turn, [n_0, ..., n_k]) where n_i
 % represents the number of matches left in row i. turn is one of ["us", "them"].
 
 % Move generator
+%% moves(nim(T, Pos), nim(T, Pos)) :-
+%% 	c0(Pos, 0), !.
+
 moves(nim(T, Pos), nim(T1, Next)) :-
 	gennext(Pos, Next),
 	ldiff(Pos, Next, Diff),
@@ -35,3 +38,6 @@ nextturn(them, us).
 % Check game termination
 % If a player leaves a completely empty set of matches, they win.
 terminal(nim(T, Pos), W) :- c0(Pos, 0), nextturn(T, W).
+
+% Turn selector
+tomove(nim(T, _), T).
