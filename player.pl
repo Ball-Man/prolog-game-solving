@@ -14,12 +14,12 @@ play(InitPos) :-
 play_iter(Pos) :-
   terminal(Pos, W), !,
   user(W, Winner),
-  write(Pos), nl,
+  show(Pos), nl,
   write(Winner), write(' wins'), nl.
 
 play_iter(Pos) :-
   tomove(Pos, them), !,
-  write(Pos), nl,
+  show(Pos), nl,
   write('Your move: '),
   read(Move),
   moves(Pos, Move, Next),
@@ -27,7 +27,7 @@ play_iter(Pos) :-
 
 play_iter(Pos) :-
   tomove(Pos, us),
-  write(Pos), nl,
+  show(Pos), nl,
   next(Pos, Move, Next),
   write('AI moves '), write(Move), nl,
   play_iter(Next).

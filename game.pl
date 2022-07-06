@@ -1,4 +1,4 @@
-:- module(game, [moves/3, terminal/2, tomove/2]).
+:- module(game, [moves/3, terminal/2, tomove/2, show/1]).
 
 % Nim game predicates (move generators, terminal positions, ...)
 % A nim position is represented by the term nim(turn, [n_0, ..., n_k]) where n_i
@@ -51,3 +51,16 @@ terminal(nim(T, Pos), W) :- c0(Pos, 0), nextturn(T, W).
 
 % Turn selector
 tomove(nim(T, _), T).
+
+% Pretty print the current game position
+show(nim(T, Pos)) :- show_heaps(Pos, 0).
+
+show_heaps([], _) :- !.
+show_heaps([H| L], I) :-
+	write(I), write('- '), show_heap(H, 'O'), nl,
+	NextI is I + 1,
+	show_heaps(L, NextI).
+
+show_heap(0, _) :- !.
+show_heap(N, Symbol) :-
+	write(Symbol), write(' '), Next is N - 1, show_heap(Next, Symbol).
