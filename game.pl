@@ -1,18 +1,28 @@
-:- module(game, [moves/2, terminal/2, tomove/2]).
+:- module(game, [moves/3, terminal/2, tomove/2]).
 
 % Nim game predicates (move generators, terminal positions, ...)
 % A nim position is represented by the term nim(turn, [n_0, ..., n_k]) where n_i
 % represents the number of matches left in row i. turn is one of ["us", "them"].
 
 % Move generator
-%% moves(nim(T, Pos), nim(T, Pos)) :-
-%% 	c0(Pos, 0), !.
-
-moves(nim(T, Pos), nim(T1, Next)) :-
+% Move is a pair of integers (Index, Value) where:
+% Index in [0, length(Pos) - 1], Value in [0, n_Index]
+moves(nim(T, Pos), Index-Value, nim(T1, Next)) :-
+	% Generate plausible new state
 	gennext(Pos, Next),
 	ldiff(Pos, Next, Diff),
 	c0(Diff, Count),
 	Count == 1,
+
+	% Enforce move
+	length(Pos, S),
+	SizeLimit is S - 1,
+	between(0, SizeLimit, Index),
+	nth0(Index, Pos, PrevElement),
+	nth0(Index, Next, NextElement),
+	Value is PrevElement - NextElement,
+	Value > 0,
+
 	nextturn(T, T1).
 
 % Difference between numeric lists
