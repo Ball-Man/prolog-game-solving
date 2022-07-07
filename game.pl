@@ -1,4 +1,4 @@
-:- module(game, [name/1, moves/3]).
+:- module(game, [name/1, moves/3, tomove/2]).
 
 % MNK (eg. tic-tac-toe) game predicates.
 % An MNK game position is represented by the term:
@@ -46,3 +46,6 @@ rowdiff([H| L], [H1| L1], N) :- rowdiff(L, L1, NP), N is NP + 1.
 
 nextturn(us, them).
 nextturn(them, us).
+
+% Turn selector
+tomove(mnk(T, _), T).
