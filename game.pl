@@ -12,8 +12,14 @@
 moves(mnk(T, Pos, K), X-Y, mnk(T1, Next, K)) :-
   gennext(Pos, T, Next),
 
-  nextturn(T, T1).
+  % Enforce move coordinates
+  nth0(Y, Next, NextRow),
+  nth0(X, NextRow, NextCell),
+  nth0(Y, Pos, Row),
+  nth0(X, Row, Cell),
+  Cell \== NextCell,
 
+  nextturn(T, T1).
 
 % Accept the game matrix and generates each row
 gennext(L, T, L1) :- gennext(L, T, 1, L1).

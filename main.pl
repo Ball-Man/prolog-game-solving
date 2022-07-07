@@ -3,4 +3,4 @@
 %% :- use_module(player).
 
 %% :- trace.
-?- moves(mnk(us, [[blank, blank, blank], [blank, blank, blank], [blank, blank, blank], [blank, blank, blank]], 3), M, Next), write(Next).
+?- moves(mnk(us, [[blank, blank, blank], [blank, blank, blank], [blank, blank, blank], [blank, blank, blank]], 3), M, Next), write(Next), nl, write(M).
