@@ -13,6 +13,8 @@ play(InitPos) :-
   play_iter(InitPos).
 
 % Play game from the given game position
+play_iter(quit) :- !, write('Quitting'), nl.
+
 play_iter(Pos) :-
   terminal(Pos, W), !,
   user(W, Winner),
@@ -24,7 +26,14 @@ play_iter(Pos) :-
   show(Pos), nl,
   write('Your move: '),
   read(Move),
-  moves(Pos, Move, Next),
+  % Sanity check
+  (
+    Move == quit, !,
+    Next = quit;
+    moves(Pos, Move, Next), !;
+    write('Illegal move, try again'), nl,
+    Next = Pos
+  ),
   play_iter(Next).
 
 play_iter(Pos) :-
