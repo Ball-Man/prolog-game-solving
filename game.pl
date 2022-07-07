@@ -55,7 +55,7 @@ terminal(nim(T, Pos), W) :- c0(Pos, 0), nextturn(T, W).
 tomove(nim(T, _), T).
 
 % Pretty print the current game position
-show(nim(T, Pos)) :- show_heaps(Pos, 0).
+show(nim(_, Pos)) :- show_heaps(Pos, 0).
 
 show_heaps([], _) :- !.
 show_heaps([H| L], I) :-
