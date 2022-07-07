@@ -8,6 +8,8 @@ user(us, 'AI').
 user(them, 'User').
 
 play(InitPos) :-
+  name(Game),
+  write(Game), write(' started'), nl,
   play_iter(InitPos).
 
 % Play game from the given game position
