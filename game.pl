@@ -1,10 +1,12 @@
-:- module(game, [moves/3]).
+:- module(game, [name/1, moves/3]).
 
 % MNK (eg. tic-tac-toe) game predicates.
 % An MNK game position is represented by the term:
 % mnk(turn, [[x_0, ..., x_m-1]_0, ..., [...]_n-1], k), internal representation is
 % basically the matrix of the MNK game. Any x_i can be either us (circle).
 % them (cross) or blank.
+
+name('MNK').
 
 % Move generator
 % Move is a pair of integers (X, Y) that represent what cell the player wants
