@@ -1,4 +1,4 @@
-:- module(game, [name/1, moves/3, tomove/2]).
+:- module(game, [name/1, moves/3, tomove/2, terminal/2, show/1]).
 
 % MNK (eg. tic-tac-toe) game predicates.
 % An MNK game position is represented by the term:
@@ -48,4 +48,88 @@ nextturn(us, them).
 nextturn(them, us).
 
 % Turn selector
-tomove(mnk(T, _), T).
+tomove(mnk(T, _, _), T).
+
+% Check game termination
+terminal(mnk(T, Pos, K), W) :-
+  columns(Pos, Cols), rows(Pos, Rows),
+  Rows0 is Rows - 1, Cols0 is Cols - 1,
+  between(0, Cols0, X),
+  between(0, Rows0, Y),
+  (W = us; W = them),
+  (
+    terminal_row(Pos, Y, W, K);
+    terminal_column(Pos, X, W, K);
+    terminal_diags(Pos, X, 0, W, K);
+    terminal_diags(Pos, 0, Y, W, K);
+    terminal_diags(Pos, Cols0, Y, W, K)
+  ).
+
+% Check both sides diagonals starting at X, Y
+terminal_diags(Pos, X, Y, T, K) :-
+  terminal_diag(Pos, X, Y, 1, 1, T, _, M1),
+  terminal_diag(Pos, X, Y, -1, 1, T, _, M2),
+  T \== blank,
+  (M1 >= K; M2 >= K).
+
+% Check termination for row at index Y
+terminal_row(Pos, Y, T, K) :-
+  terminal_diag(Pos, 0, Y, 1, 0, T, _, M),
+  T \== blank,
+  M >= K.
+
+% Check termination for column at index X
+terminal_column(Pos, X, T, K) :-
+  terminal_diag(Pos, X, 0, 0, 1, T, _, M),
+  T \== blank,
+  M >= K.
+
+% True if player T has its stone at position X, Y in the game grid
+checked(Pos, T, X, Y) :-
+  nth0(Y, Pos, Row),
+  nth0(X, Row, Cell),
+  T = Cell.
+
+% Query grid size
+rows(Pos, Rows) :- length(Pos, Rows).
+columns([], 0) :- !.
+columns(Pos, Cols) :- nth0(0, Pos, Row), length(Row, Cols).
+
+% Check if given coordinates are internal to the grid
+internal(Pos, X, Y) :-
+  X >= 0,
+  Y >= 0,
+  rows(Pos, Rows),
+  Y < Rows,
+  columns(Pos, Cols),
+  X < Cols.
+
+% Compute termination for diagonal starting at pos X, Y.
+% Diagonal direction is given by DX and DY
+% By using degenerate directions (<0, 1>, <1, 0>, inspecting rows and columns
+% is possible).
+% M can be left uninstantiated, it will be unified with the maximum
+% chain of symbols found (that match T).
+terminal_diag(Pos, X, Y, DX, DY, T, S, M) :-
+  internal(Pos, X, Y),
+  checked(Pos, T, X, Y), !,
+  NX is X + DX, NY is Y + DY,
+  terminal_diag(Pos, NX, NY, DX, DY, T, NS, NM),
+  S is NS + 1,
+  M is max(S, NM).
+
+terminal_diag(Pos, X, Y, DX, DY, T, S, M) :-
+  internal(Pos, X, Y),
+  \+ checked(Pos, T, X, Y), !,
+  NX is X + DX, NY is Y + DY,
+  terminal_diag(Pos, NX, NY, DX, DY, T, NS, NM),
+  M is max(NM, NS),
+  S is 0.
+
+terminal_diag(Pos, X, Y, DX, DY, T, S, M) :-
+  \+ internal(Pos, X, Y),
+  S is 0,
+  M is 0.
+
+% Placeholder
+show(GamePos) :- write(GamePos).
