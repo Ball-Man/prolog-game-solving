@@ -15,10 +15,8 @@ moves(mnk(T, Pos, K), X-Y, mnk(T1, Next, K)) :-
   gennext(Pos, T, Next),
 
   % Enforce move coordinates
-  nth0(Y, Next, NextRow),
-  nth0(X, NextRow, NextCell),
-  nth0(Y, Pos, Row),
-  nth0(X, Row, Cell),
+  checked(Pos, Cell, X, Y),
+  checked(Next, NextCell, X, Y),
   Cell \== NextCell,
 
   nextturn(T, T1).
