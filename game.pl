@@ -131,5 +131,29 @@ terminal_diag(Pos, X, Y, DX, DY, T, S, M) :-
   S is 0,
   M is 0.
 
-% Placeholder
-show(GamePos) :- write(GamePos).
+% Show board
+% us tokens are rendered as U, them as T, blank as whitespace.
+show(mnk(_, Pos, _)) :- show_header(Pos), nl, show_grid(Pos, 0).
+
+show_header(Pos) :- tab(3), columns(Pos, Cols), show_header(0, Cols).
+show_header(Max, Max) :- !.
+show_header(Index, Max) :-
+  write(Index), write(' | '),
+  NI is Index + 1,
+  show_header(NI, Max).
+
+show_token(us, 'U').
+show_token(them, 'T').
+show_token(blank, ' ').
+
+show_grid([], _).
+show_grid([Row| L], Index) :-
+  write(Index), write('- '),
+  show_row(Row), nl,
+  NI is Index + 1,
+  show_grid(L, NI).
+
+show_row([]).
+show_row([H| L]) :-
+  show_token(H, T), write(T), write(' | '),
+  show_row(L).
