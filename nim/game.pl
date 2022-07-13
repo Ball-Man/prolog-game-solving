@@ -1,4 +1,4 @@
-%% :- module(game, [name/1, moves/3, terminal/2, tomove/2, show/1]).
+:- module(game, [name/1, moves/3, terminal/2, tomove/2, show/1]).
 
 % Nim game predicates (move generators, terminal positions, ...)
 % A nim position is represented by the term nim(turn, [n_0, ..., n_k]) where n_i
@@ -17,9 +17,6 @@ moves(nim(T, Pos), Index-Value, nim(T1, Next)) :-
 	Count == 1,
 
 	% Enforce move
-	length(Pos, S),
-	SizeLimit is S - 1,
-	between(0, SizeLimit, Index),
 	nth0(Index, Pos, PrevElement),
 	nth0(Index, Next, NextElement),
 	Value is PrevElement - NextElement,
