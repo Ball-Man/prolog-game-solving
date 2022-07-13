@@ -12,9 +12,9 @@ won(Pos) :-
 	moves(Pos, _, Next),
 	won(Next).
 won(Pos) :-
-	tomove(Pos, them), !,
+	tomove(Pos, them),
 	\+ (moves(Pos, _, Next),
-		\+ won(Next)).
+			\+ won(Next)).
 
 % Compute next us winning move, if the position is won
 next(Pos, Move, Next) :-
